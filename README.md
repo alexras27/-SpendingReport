@@ -1,1 +1,1 @@
-# ExpenceReport
+# My contribution to a site I made in a group to track and provide advice for cost cutting. A PHP script for an HTML page that connects to an SQL database for showing current status as well as recent and longterm spending.
