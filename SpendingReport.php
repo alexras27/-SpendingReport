@@ -1,4 +1,4 @@
-<!--/Retreve spending information from SQL db and display-->
+<!--/Retreve expence info from db and display it-->
 <?php
 session_start();
 error_reporting(0);
@@ -15,13 +15,12 @@ if (strlen($_SESSION['newsession']==0)) {
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Daily Expense Tracker - Dashboard</title>
+	<title>Spending Tracker</title>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/font-awesome.min.css" rel="stylesheet">
-	<link href="css/datepicker3.css" rel="stylesheet">
 	<link href="css/styles.css" rel="stylesheet">
-
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	<link href="css/datepicker3.css" rel="stylesheet">
+	
 
 </head>
 <body>
@@ -33,7 +32,7 @@ if (strlen($_SESSION['newsession']==0)) {
 		
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">Dashboard</h1>
+				<h1 class="page-header">Spending Tracker</h1>
 			</div>
 		</div>
 		
@@ -49,16 +48,19 @@ if (strlen($_SESSION['newsession']==0)) {
 //Expenses from Today
 $userid=$_SESSION['newsession'];
 $tdate=date('Y-m-d');
-$query=mysqli_query($con,"select sum(ExpenseCost)  as today from tblexpense where (ExpenseDate)='$tdate' && (UserId='$userid');");
+$query=mysqli_query($con,"select sum(Spent)  as today from tblexpense where (Date)='$tdate' && (UserId='$userid');");
 $result=mysqli_fetch_array($query);
-$sum_today_expense=$result['today'];
+$sum_today_spent=$result['today'];
  ?> 
 
-						<h4>Today's Expense</h4>
-						<div class="easypiechart" id="easypiechart-blue" data-percent="<?php echo $sum_today_expense;?>" ><span class="percent"><?php if($sum_today_expense==""){
-echo "N/A";
-} else {
-echo $sum_today_expense;
+						<h4>Today</h4>
+						<div class="easypiechart" id="easypiechart-red" data-percent="<?php echo $sum_today_spent;?>" >
+						<span class="percent">
+<?php if($sum_today_spent==""){
+	echo "N/A";
+} 
+else {
+	echo $sum_today_spent;
 }
 
 	?></span></div>
@@ -71,17 +73,19 @@ echo $sum_today_expense;
 //Expenses from yesterday
 $userid=$_SESSION['newsession'];
 $ydate=date('Y-m-d',strtotime("-1 days"));
-$query1=mysqli_query($con,"select sum(ExpenseCost)  as yesterday from tblexpense where (ExpenseDate)='$ydate' && (UserId='$userid');");
+$query1=mysqli_query($con,"select sum(Spent)  as yesterday from tblexpense where (Date)='$ydate' && (UserId='$userid');");
 $result1=mysqli_fetch_array($query1);
-$sum_yesterday_expense=$result1['yesterday'];
+$sum_yesterday_spent=$result1['yesterday'];
  ?> 
 					<div class="panel-body easypiechart-panel">
-						<h4>Yesterday's Expense</h4>
-						<div class="easypiechart" id="easypiechart-orange" data-percent="<?php echo $sum_yesterday_expense;?>" ><span class="percent"><?php if($sum_yesterday_expense==""){
-	echo "N/a";
+						<h4>Yesterday</h4>
+						<div class="easypiechart" id="easypiechart-orange" data-percent="<?php echo $sum_yesterday_spent;?>" >
+						<span class="percent">
+<?php if($sum_yesterday_spent==""){
+	echo "N/A";
 }
 else {
-	echo $sum_yesterday_expense;
+	echo $sum_yesterday_spent;
 }
 ?>
 	
@@ -99,17 +103,19 @@ else {
 $userid=$_SESSION['newsession'];
  $pastdate=  date("Y-m-d", strtotime("-1 week")); 
 $crrntdte=date("Y-m-d");
-$query2=mysqli_query($con,"select sum(ExpenseCost)  as weekly from tblexpense where ((ExpenseDate) between '$pastdate' and '$crrntdte') && (UserId='$userid');");
+$query2=mysqli_query($con,"select sum(Spent)  as weekly from tblexpense where ((Date) between '$pastdate' and '$crrntdte') && (UserId='$userid');");
 $result2=mysqli_fetch_array($query2);
-$sum_weekly_expense=$result2['weekly'];
+$sum_weekly_spent=$result2['weekly'];
  ?>
 					<div class="panel-body easypiechart-panel">
-						<h4>Last 7day's Expense</h4>
-						<div class="easypiechart" id="easypiechart-teal" data-percent="<?php echo $sum_weekly_expense;?>"><span class="percent"><?php if($sum_weekly_expense==""){
-	echo "N/a";
+						<h4>Last Week</h4>
+						<div class="easypiechart" id="easypiechart-yellow" data-percent="<?php echo $sum_weekly_spent;?>">
+						<span class="percent">
+<?php if($sum_weekly_spent==""){
+	echo "N/A";
 } 
 else {
-	echo $sum_weekly_expense;
+	echo $sum_weekly_spent;
 }?>
 
 
@@ -125,16 +131,18 @@ else {
 $userid=$_SESSION['newsession'];
  $monthdate=  date("Y-m-d", strtotime("-1 month")); 
 $crrntdte=date("Y-m-d");
-$query3=mysqli_query($con,"select sum(ExpenseCost)  as monthly from tblexpense where ((ExpenseDate) between '$monthdate' and '$crrntdte') && (UserId='$userid');");
+$query3=mysqli_query($con,"select sum(Spent)  as monthly from tblexpense where ((Date) between '$monthdate' and '$crrntdte') && (UserId='$userid');");
 $result3=mysqli_fetch_array($query3);
-$sum_monthly_expense=$result3['monthly'];
+$sum_monthly_spent=$result3['monthly'];
  ?>
 					<div class="panel-body easypiechart-panel">
-						<h4>Last 30day's Expenses</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="<?php echo $sum_monthly_expense;?>" ><span class="percent"><?php if($sum_monthly_expense==""){
-echo "0";
+						<h4>Last 30 Days</h4>
+						<div class="easypiechart" id="easypiechart-green" data-percent="<?php echo $sum_monthly_spent;?>" >
+						<span class="percent">	
+<?php if($sum_monthly_spent==""){
+	echo "N/A";
 } else {
-echo $sum_monthly_expense;
+	echo $sum_monthly_spent;
 }
 
 	?></span></div>
@@ -150,17 +158,20 @@ echo $sum_monthly_expense;
 //Yearly
 $userid=$_SESSION['newsession'];
  $cyear= date("Y");
-$query4=mysqli_query($con,"select sum(ExpenseCost)  as yearly from tblexpense where (year(ExpenseDate)='$cyear') && (UserId='$userid');");
+$query4=mysqli_query($con,"select sum(Spent)  as yearly from tblexpense where (year(Date)='$cyear') && (UserId='$userid');");
 $result4=mysqli_fetch_array($query4);
-$sum_yearly_expense=$result4['yearly'];
+$sum_yearly_spent=$result4['yearly'];
  ?>
 					<div class="panel-body easypiechart-panel">
-						<h4>Current Year Expenses</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="<?php echo $sum_yearly_expense;?>" ><span class="percent"><?php if($sum_yearly_expense==""){
-	echo "0";
+						<h4>This Year</h4>
+						<div class="easypiechart" id="easypiechart-blue" data-percent="<?php echo $sum_yearly_spent;?>">
+						<span class="percent">
+							
+<?php if($sum_yearly_spent==""){
+	echo "N/A";
 } 
 else {
-	echo $sum_yearly_expense;
+	echo $sum_yearly_spent;
 }
 ?>
 
@@ -179,17 +190,19 @@ else {
 					<?php
 //Yearly Expense
 $userid=$_SESSION['newsession'];
-$query5=mysqli_query($con,"select sum(ExpenseCost)  as total from tblexpense where UserId='$userid';");
+$query5=mysqli_query($con,"select sum(Spent)  as total from tblexpense where UserId='$userid';");
 $result5=mysqli_fetch_array($query5);
-$sum_total_expense=$result5['total'];
+$sum_total_spent=$result5['total'];
  ?>
 					<div class="panel-body easypiechart-panel">
-						<h4>Total Expenses</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="<?php echo $sum_total_expense;?>" ><span class="percent"><?php if($sum_total_expense==""){
-	echo "0";
+						<h4>Total</h4>
+						<div class="easypiechart" id="easypiechart-purple" data-percent="<?php echo $sum_total_spent;?>">
+						<span class="percent">
+<?php if($sum_total_spent==""){
+	echo "N/A";
 } 
 else {
-	echo $sum_total_expense;
+	echo $sum_total_spent;
 }
 ?>
 
@@ -207,7 +220,14 @@ else {
 		
 	</div>	
 	<?php include_once('includes/footer.php');?>
-		
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/chart.min.js"></script>
+	<script src="js/chart-data.js"></script>
+	<script src="js/easypiechart.js"></script>
+	<script src="js/easypiechart-data.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script src="js/custom.js"></script>
 </body>
 </html>
 <?php } ?>
