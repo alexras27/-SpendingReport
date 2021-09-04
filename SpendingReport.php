@@ -1,4 +1,4 @@
-<!--/retreve expence info from db and display it-->
+<!--/Retreve spending information from SQL db and display-->
 <?php
 session_start();
 error_reporting(0);
